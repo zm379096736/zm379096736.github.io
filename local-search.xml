@@ -3,5 +3,32 @@
   
   
   
+  <entry>
+    <title>Leetcode 22题 括号生成</title>
+    <link href="/2020/03/14/Leetcode%2022%E9%A2%98%20%E6%8B%AC%E5%8F%B7%E7%94%9F%E6%88%90/"/>
+    <url>/2020/03/14/Leetcode%2022%E9%A2%98%20%E6%8B%AC%E5%8F%B7%E7%94%9F%E6%88%90/</url>
+    
+    <content type="html"><![CDATA[<p>内容来自 <a href="https://leetcode-cn.com/problems/generate-parentheses/solution/hui-su-suan-fa-by-liweiwei1419" target="_blank" rel="noopener">liweiwei1419</a></p><ol><li>回溯算法本质上是树形问题的深度优先遍历，深度优先遍历有回退的过程，就需要状态重置 (就是回溯) ；</li><li>但如果状态变量是字符串的时候，因为字符串的不可变性，在拼接过程中会产生新的字符串，因此每一个状态 (树中的每一个节点) 都是新的字符串，可以不用显式回溯；</li><li>深度优先遍历用递归去实现的原因：<br> (1) 树形结构本身就是递归定义的<br> (2) 深度优先遍历要用到 stack, 但可以用函数的栈，把需要的节点状态变量设置为函数的参数，这样就不用再写一个节点类去完成深度优先遍历。</li></ol><p><img src="/images/pasted-0.png" srcset="/img/loading.gif" alt="upload successful"></p><pre><code>class Solution:    def generateParenthesis(self, n: int) -&gt; List[str]:        cut_str &#x3D; &quot;&quot;        res &#x3D; []        def dfs(cur_str, left, right): # 输入当前字符串内容, 剩余左括号数量, 剩余右括号数量        if left &#x3D;&#x3D; 0 and right &#x3D;&#x3D; 0:            res.append(cur_str)                return            if left &gt; right:            return            if left &gt; 0:            dfs(cur_str + &quot;(&quot;, left - 1, right)            if right &gt; 0:            dfs(cur_str + &quot;)&quot;, ledt, right - 1)        dfs(cur_str, n, n)        return res</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>leetcode</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>leetcode</tag>
+      
+      <tag>回溯</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
   
 </search>

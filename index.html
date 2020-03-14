@@ -17,7 +17,7 @@
   <meta name="description" content="计算机科学与技术 ｜ 自然语言处理">
   <meta name="author" content="Morphling">
   <meta name="keywords" content="自然语言处理 问题生成 leetcode小白">
-  <title>标签 - Morphling</title>
+  <title>Morphling</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
@@ -43,7 +43,7 @@
 
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 100vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -124,6 +124,10 @@
           </div>
 
           
+            <div class="scroll-down-bar">
+              <i class="fas fa-angle-down scroll-down-arrow"></i>
+            </div>
+          
         </div>
       </div>
     </div>
@@ -133,16 +137,65 @@
     
       <div class="container nopadding-md">
         <div class="py-5 z-depth-3" id="board"
-          >
+          style=margin-top:0>
           
           <div class="container">
             <div class="row">
               <div class="col-12 col-md-10 m-auto">
                 
 
-<div class="text-center tagcloud">
-  <a href="/tags/leetcode/" style="font-size: 15px; color: #bbe">leetcode</a> <a href="/tags/%E5%9B%9E%E6%BA%AF/" style="font-size: 15px; color: #bbe">回溯</a>
-</div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/03/14/Leetcode%2022%E9%A2%98%20%E6%8B%AC%E5%8F%B7%E7%94%9F%E6%88%90/">
+        <p class="h4 index-header">Leetcode 22题 括号生成</p>
+      </a>
+
+      <a href="/2020/03/14/Leetcode%2022%E9%A2%98%20%E6%8B%AC%E5%8F%B7%E7%94%9F%E6%88%90/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">内容来自 liweiwei1419
+
+回溯算法本质上是树形问题的深度优先遍历，深度优先遍历有回退的过程，就需要状态重置 (就是回溯) ；
+但如果状态变量是字符串的时候，因为字符串的不可变性，在拼接过程中会产生新的字符串，因此每一个状态 (树中的每一个节点) 都是新的字符串，可以不用显式回溯；
+深度优先遍历用递归去实现的原因： (1) 树形结构本身就是递归定义的 (2) 深度优先遍历要用到 stack, 但可以用函数的栈，把需要的节点状态变量设置为函数的参数，这样就不用再写一个节点类去完成深度优先遍历。
+
+
+class Solution:
+    def generateParenthesis(</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-03-14&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/leetcode/">leetcode</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/leetcode/">leetcode</a>&nbsp;
+          
+            <a href="/tags/%E5%9B%9E%E6%BA%AF/">回溯</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+
+
+
 
               </div>
             </div>
@@ -239,7 +292,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "标签&nbsp;",
+        "better late than never.&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
