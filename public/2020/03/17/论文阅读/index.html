@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="计算机科学与技术 ｜ 自然语言处理">
+  <meta name="author" content="Morphling">
+  <meta name="keywords" content="自然语言处理 问题生成 leetcode小白">
+  <title>论文阅读 Paragraph-level Neural Question Generation with Maxout Pointer and Gated Self-attention Networks - Morphling</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css" />
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link  rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css" />
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Morphling</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期二, 三月 17日 2020, 10:14 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      4 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <p><strong>EMNLP 2018</strong></p>
+<h3 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h3><p>这篇主要针对的任务是答案为文章中片段的问题生成，问题生成可以用在问答系统和语音助手以及教育等领域上。现存的模型大多数都是以一或两句作为输入，长文本仍然在 seq2seq 模型表现不是很理想（以整段作为输入）。这篇文章提出了 maxout pointer mechansim with gated self-attention encoder 去处理长文本的问题。BLUE-4 分数达到了 <strong>16.3</strong>。</p>
+<hr>
+<h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>QG 的应用场景：QnA and conversation systems, education (H&amp;S， 2010)<br>QG 的资料集与阅读理解的资料集很相似，比如 SQuAD 和 MS MARCO。<br>这篇文章处理的 QG 类型是 answer-aware，输入为文章和答案，输出是以答案为目标的问题。答案是在文章中的一段。<br>(Du Et al., 2017) 指出大概在 SQuAD 20% 的问题需要整个段落的信息来回答，但是整个段落包含了很多无关的信息，所以怎么利用好在段落中有关的信息是一个挑战。在此之前的 para-level 模型表现都不是很理想。<br>这篇文章提出了一个 seq2seq attenion model， 包含了 maxout pointer mechansim 和 gated self-attention 来处理 para-level 的输入。</p>
+<hr>
+<h3 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h3><p><img src="/images/pasted-1.png" srcset="/img/loading.gif" alt="upload successful"></p>
+<h4 id="Problem-definition"><a href="#Problem-definition" class="headerlink" title="Problem definition"></a>Problem definition</h4><p>P: 文章(可为句子或者段落)<br>A: 答案<br>任务是找到 $\overline{Q}$:</p>
+<p>\begin{equation}<br>    \overline{Q} = \mathop{\arg\max}_{Q} Prob(Q|P, A)<br>\end{equation}</p>
+<p>Q可能是来自于文章或者字典</p>
+<h4 id="Passage-and-Answer-Encoding"><a href="#Passage-and-Answer-Encoding" class="headerlink" title="Passage and Answer Encoding"></a>Passage and Answer Encoding</h4><h5 id="encoding-process"><a href="#encoding-process" class="headerlink" title="encoding process"></a>encoding process</h5><p>\begin{equation}<br>    u_{t} = RNN^{E}(u_{t-1}, [e_{t}, m_{t}])<br>\end{equation}</p>
+<p>$u_{t}$ 表示 RNN 在时间 t 的隐藏状态，$e_{t}$ 表示 $x_{t}$ 在 文章 P 的 word embedding，$m_{t}$ 表示该词是否在答案中，$[a, b]$ 为 concatenation a 和 b。这篇文章把该方法称为 answer tagging，目的是为了可以生成与答案更相关的问题。<br>如果 $RNN^{e}$ 是双向的话，$ U = {[\overrightarrow{u_{t}},\overleftarrow{u_{t}}]} $</p>
+<h5 id="gated-self-attention"><a href="#gated-self-attention" class="headerlink" title="gated self-attention"></a>gated self-attention</h5><p><strong>该部分内容参考 <a href="https://www.cnblogs.com/LuoboLiam/p/11688786.html" target="_blank" rel="noopener">xinze</a></strong><br>gated self-attention 设计用来整合整个文章的信息还有嵌入文章内部的依赖关系，在每一时间步中优化文章和答案的嵌入表示。<br>分为两步，一、$a_{t}^{s}$ 是段落中所有 encode 的单词对当前 $t$ 时刻所对应单词的之间的依赖关系的系数，$U$ 表示从1到最后时刻所有的 hidden state 组成的矩阵，即表示 passage-answer；${s_t}$ 表示段落中所有 encode 的单词对当前$t$时刻所对应单词的之间的依赖关系，也是 self matching 的表示。类似于self-attention，主要目的是计算文章中不同单词对于生成问题的重要性（相关性）</p>
+<p>\begin{equation}<br>    a_{t}^{s} = softmax(U^{T}W^{s}u_{t})<br>\end{equation}</p>
+<p>\begin{equation}<br>    s_{t} = U·a_{t}^{s}<br>\end{equation}</p>
+<p>二、${f_t}$ 表示新的包含 self matching 信息的 passage-answer 表示，${g_t}$ 表示一个可学习的门控单元，最后，${\hat u_t}$ 表示新的 passage-answer 表示，用来喂给decoder。gated attention 可以专注于 answer 与当前段落之间的关系。</p>
+<p>\begin{equation}<br>    {f_t} = \tanh ({W^f}[{u_t},{s_t}])<br>\end{equation}</p>
+<p>\begin{equation}<br>    {g_t} = sigmoid({W^g}[{u_t},{s_t}])<br>\end{equation}</p>
+<p>\begin{equation}<br>    {\hat u_t} = {g_t} \odot {f_t} + (1 - {g_t}) \odot {u_t}<br>\end{equation}</p>
+<h4 id="decoding-with-attention-and-maxout-pointer"><a href="#decoding-with-attention-and-maxout-pointer" class="headerlink" title="decoding with attention and maxout pointer"></a>decoding with attention and maxout pointer</h4><p>在解码阶段，decoder 是另一个RNN，接受编码过后的 input 和之前解码完的词</p>
+<p>\begin{equation}<br>    {d_t} = RNN^D(d_{t-1},y_{t-1})<br>\end{equation}</p>
+<p>\begin{equation}<br>    p({y_t}|{ {y_{ &lt; t}}} ) = softmax ({W^V}{d_t})<br>\end{equation}</p>
+<p>$d_t$ 是 RNN 在时间 t 的 hidden state，$d_0$ 是  encoder 的最后一个 hidden state，通过 softmax 计算所有词的概率</p>
+<h5 id="attention"><a href="#attention" class="headerlink" title="attention"></a>attention</h5><p>使用 luong attention mechanism</p>
+<p>\begin{equation}<br>    {r_t} = \hat{U}^T{W^a}{d_t}<br>\end{equation}</p>
+<p>\begin{equation}<br>    {a^d}_t = softmax ({r_t})<br>\end{equation}</p>
+<p>\begin{equation}<br>    {c_t} = \hat U \cdot {a^d}_t<br>\end{equation}</p>
+<p>\begin{equation}<br>    {\hat d}_t = \tanh ({W^b}[{d_t},{c_t}])<br>\end{equation}</p>
+<p>$r_t$ 为 attention 分数，通过与 decoder state $d_t$ 结合生成一个新的 decoder state</p>
+<h5 id="copy-pointer"><a href="#copy-pointer" class="headerlink" title="copy/pointer"></a>copy/pointer</h5><p>\begin{equation}<br>    sc^{copy}({y_t}) = \sum\limits_{k,{x_k} = {y_t}} {r_{t,k}} ,{y_t} \in \chi<br>\end{equation}</p>
+<p>\begin{equation}<br>    sc^{copy}({y_t}) =  - \inf ,otherwise<br>\end{equation}</p>
+<p>复制机制是可以从文中复制词也可以从固定的单词表中生成<br>这篇文章用的 pointer mechanism 直接利用了注意力分数$r_t$</p>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E9%97%AE%E9%A2%98%E7%94%9F%E6%88%90/">问题生成</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-12 col-md-6">
+                    
+                  </div>
+                  <div class="post-next col-12 col-md-6">
+                    
+                      <a href="/2020/03/14/Leetcode%2022%E9%A2%98%20%E6%8B%AC%E5%8F%B7%E7%94%9F%E6%88%90/">
+                        <span>Leetcode 22题 括号生成</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+              
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+      var tocLimMax = 2 * boardTop + boardCtn.height();
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+        console.log(tocLimMax, scroH)
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = boardCtn.css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "论文阅读 Paragraph-level Neural Question Generation with Maxout Pointer and Gated Self-attention Networks&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
