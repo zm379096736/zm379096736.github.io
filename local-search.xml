@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+  
+  <entry>
+    <title>论文阅读 Paragraph-level Neural Question Generation with Maxout Pointer and Gated Self-attention Networks</title>
+    <link href="/2020/03/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/"/>
+    <url>/2020/03/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</url>
+    
+    <content type="html"><![CDATA[<p><strong>EMNLP 2018</strong></p><h3 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h3><p>这篇主要针对的任务是答案为文章中片段的问题生成，问题生成可以用在问答系统和语音助手以及教育等领域上。现存的模型大多数都是以一或两句作为输入，长文本仍然在 seq2seq 模型表现不是很理想（以整段作为输入）。这篇文章提出了 maxout pointer mechansim with gated self-attention encoder 去处理长文本的问题。BLUE-4 分数达到了 <strong>16.3</strong>。</p><hr><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>QG 的应用场景：QnA and conversation systems, education (H&amp;S， 2010)<br>QG 的资料集与阅读理解的资料集很相似，比如 SQuAD 和 MS MARCO。<br>这篇文章处理的 QG 类型是 answer-aware，输入为文章和答案，输出是以答案为目标的问题。答案是在文章中的一段。<br>(Du Et al., 2017) 指出大概在 SQuAD 20% 的问题需要整个段落的信息来回答，但是整个段落包含了很多无关的信息，所以怎么利用好在段落中有关的信息是一个挑战。在此之前的 para-level 模型表现都不是很理想。<br>这篇文章提出了一个 seq2seq attenion model， 包含了 maxout pointer mechansim 和 gated self-attention 来处理 para-level 的输入。</p><hr><h3 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h3><p><img src="/images/pasted-1.png" srcset="/img/loading.gif" alt="upload successful"></p><h4 id="Problem-definition"><a href="#Problem-definition" class="headerlink" title="Problem definition"></a>Problem definition</h4><p>P: 文章(可为句子或者段落)<br>A: 答案<br>任务是找到 $\overline{Q}$:</p><p>\begin{equation}<br>    \overline{Q} = \mathop{\arg\max}_{Q} Prob(Q|P, A)<br>\end{equation}</p><p>Q可能是来自于文章或者字典</p><h4 id="Passage-and-Answer-Encoding"><a href="#Passage-and-Answer-Encoding" class="headerlink" title="Passage and Answer Encoding"></a>Passage and Answer Encoding</h4><h5 id="encoding-process"><a href="#encoding-process" class="headerlink" title="encoding process"></a>encoding process</h5><p>\begin{equation}<br>    u_{t} = RNN^{E}(u_{t-1}, [e_{t}, m_{t}])<br>\end{equation}</p><p>$u_{t}$ 表示 RNN 在时间 t 的隐藏状态，$e_{t}$ 表示 $x_{t}$ 在 文章 P 的 word embedding，$m_{t}$ 表示该词是否在答案中，$[a, b]$ 为 concatenation a 和 b。这篇文章把该方法称为 answer tagging，目的是为了可以生成与答案更相关的问题。<br>如果 $RNN^{e}$ 是双向的话，$ U = {[\overrightarrow{u_{t}},\overleftarrow{u_{t}}]} $</p><h5 id="gated-self-attention"><a href="#gated-self-attention" class="headerlink" title="gated self-attention"></a>gated self-attention</h5><p><strong>该部分内容参考 <a href="https://www.cnblogs.com/LuoboLiam/p/11688786.html" target="_blank" rel="noopener">xinze</a></strong><br>gated self-attention 设计用来整合整个文章的信息还有嵌入文章内部的依赖关系，在每一时间步中优化文章和答案的嵌入表示。<br>分为两步，一、$a_{t}^{s}$ 是段落中所有 encode 的单词对当前 $t$ 时刻所对应单词的之间的依赖关系的系数，$U$ 表示从1到最后时刻所有的 hidden state 组成的矩阵，即表示 passage-answer；${s_t}$ 表示段落中所有 encode 的单词对当前$t$时刻所对应单词的之间的依赖关系，也是 self matching 的表示。类似于self-attention，主要目的是计算文章中不同单词对于生成问题的重要性（相关性）</p><p>\begin{equation}<br>    a_{t}^{s} = softmax(U^{T}W^{s}u_{t})<br>\end{equation}</p><p>\begin{equation}<br>    s_{t} = U·a_{t}^{s}<br>\end{equation}</p><p>二、${f_t}$ 表示新的包含 self matching 信息的 passage-answer 表示，${g_t}$ 表示一个可学习的门控单元，最后，${\hat u_t}$ 表示新的 passage-answer 表示，用来喂给decoder。gated attention 可以专注于 answer 与当前段落之间的关系。</p><p>\begin{equation}<br>    {f_t} = \tanh ({W^f}[{u_t},{s_t}])<br>\end{equation}</p><p>\begin{equation}<br>    {g_t} = sigmoid({W^g}[{u_t},{s_t}])<br>\end{equation}</p><p>\begin{equation}<br>    {\hat u_t} = {g_t} \odot {f_t} + (1 - {g_t}) \odot {u_t}<br>\end{equation}</p><h4 id="decoding-with-attention-and-maxout-pointer"><a href="#decoding-with-attention-and-maxout-pointer" class="headerlink" title="decoding with attention and maxout pointer"></a>decoding with attention and maxout pointer</h4><p>在解码阶段，decoder 是另一个RNN，接受编码过后的 input 和之前解码完的词</p><p>\begin{equation}<br>    {d_t} = RNN^D(d_{t-1},y_{t-1})<br>\end{equation}</p><p>\begin{equation}<br>    p({y_t}|{ {y_{ &lt; t}}} ) = softmax ({W^V}{d_t})<br>\end{equation}</p><p>$d_t$ 是 RNN 在时间 t 的 hidden state，$d_0$ 是  encoder 的最后一个 hidden state，通过 softmax 计算所有词的概率</p><h5 id="attention"><a href="#attention" class="headerlink" title="attention"></a>attention</h5><p>使用 luong attention mechanism</p><p>\begin{equation}<br>    {r_t} = \hat{U}^T{W^a}{d_t}<br>\end{equation}</p><p>\begin{equation}<br>    {a^d}_t = softmax ({r_t})<br>\end{equation}</p><p>\begin{equation}<br>    {c_t} = \hat U \cdot {a^d}_t<br>\end{equation}</p><p>\begin{equation}<br>    {\hat d}_t = \tanh ({W^b}[{d_t},{c_t}])<br>\end{equation}</p><p>$r_t$ 为 attention 分数，通过与 decoder state $d_t$ 结合生成一个新的 decoder state</p><h5 id="copy-pointer"><a href="#copy-pointer" class="headerlink" title="copy/pointer"></a>copy/pointer</h5><p>\begin{equation}<br>    sc^{copy}({y_t}) = \sum\limits_{k,{x_k} = {y_t}} {r_{t,k}} ,{y_t} \in \chi<br>\end{equation}</p><p>\begin{equation}<br>    sc^{copy}({y_t}) =  - \inf ,otherwise<br>\end{equation}</p><p>复制机制是可以从文中复制词也可以从固定的单词表中生成<br>这篇文章用的 pointer mechanism 直接利用了注意力分数$r_t$</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>论文阅读</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>问题生成</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Leetcode 22题 括号生成</title>
+    <link href="/2020/03/14/Leetcode%2022%E9%A2%98%20%E6%8B%AC%E5%8F%B7%E7%94%9F%E6%88%90/"/>
+    <url>/2020/03/14/Leetcode%2022%E9%A2%98%20%E6%8B%AC%E5%8F%B7%E7%94%9F%E6%88%90/</url>
+    
+    <content type="html"><![CDATA[<h4 id="内容来自-liweiwei1419"><a href="#内容来自-liweiwei1419" class="headerlink" title="内容来自 liweiwei1419"></a>内容来自 <a href="https://leetcode-cn.com/problems/generate-parentheses/solution/hui-su-suan-fa-by-liweiwei1419" target="_blank" rel="noopener">liweiwei1419</a></h4><blockquote><ol><li>回溯算法本质上是树形问题的深度优先遍历，深度优先遍历有回退的过程，就需要状态重置 (就是回溯) ；</li><li>但如果状态变量是字符串的时候，因为字符串的不可变性，在拼接过程中会产生新的字符串，因此每一个状态 (树中的每一个节点) 都是新的字符串，可以不用显式回溯；</li><li>深度优先遍历用递归去实现的原因：<br>(1) 树形结构本身就是递归定义的<br>(2) 深度优先遍历要用到 stack, 但可以用函数的栈，把需要的节点状态变量设置为函数的参数，这样就不用再写一个节点类去完成深度优先遍历。</li></ol></blockquote><hr><h2 id=""><a href="#" class="headerlink" title=""></a><img src="/images/pasted-0.png" srcset="/img/loading.gif" alt="upload successful"></h2><pre><code>class Solution:    def generateParenthesis(self, n: int) -&gt; List[str]:        cut_str &#x3D; &quot;&quot;        res &#x3D; []        def dfs(cur_str, left, right): # 输入当前字符串内容, 剩余左括号数量, 剩余右括号数量        if left &#x3D;&#x3D; 0 and right &#x3D;&#x3D; 0:            res.append(cur_str)                return            if left &gt; right:            return            if left &gt; 0:            dfs(cur_str + &quot;(&quot;, left - 1, right)            if right &gt; 0:            dfs(cur_str + &quot;)&quot;, ledt, right - 1)        dfs(cur_str, n, n)        return res</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>leetcode</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>回溯</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  
+</search>
