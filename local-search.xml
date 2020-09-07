@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>堆和优先队列</title>
+    <link href="/2020/09/07/%E5%A0%86%E5%92%8C%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/"/>
+    <url>/2020/09/07/%E5%A0%86%E5%92%8C%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/</url>
+    
+    <content type="html"><![CDATA[<p>堆用来处理海量数据的 topk 分位数<br>优先队列应用在元素优先级排序<br>堆和优先队列本质上是完全二叉树</p><p>参考<a href="https://leetcode-cn.com/problems/top-k-frequent-elements/solution/python-dui-pai-xu-by-xxinjiee/" target="_blank" rel="noopener">xxinjiee</a></p><p>O(nlogk)</p><p>因为堆和优先队列本质上是完全二叉树<br>heap = [1,2,3] 在左端添加一个占位符 0就方便使用位操作 –&gt; [0, 1, 2, 3]</p><p>父节点位 i</p><p>左节点 i &lt;&lt; 1</p><p>右节点 i &lt;&lt; 1 | 1</p><p>大顶堆中每个父节点大于子节点，小顶堆每个父节点小于子节点</p><p>堆，优先队列 有两个重要操作，时间复杂度均是 O(logk)。以小顶堆为例：</p><p>上浮sift up: 向堆尾新加入一个元素，堆规模+1，依次向上与父节点比较，如小于父节点就交换。<br>下沉sift down: 从堆顶取出一个元素（堆规模-1，用于堆排序）或者更新堆中一个元素（本题），依次向下与子节点比较，如大于子节点就交换。</p><p>对于topk 问题：最大堆求topk小，最小堆求topk大。</p><p>topk小：构建一个k个数的最大堆，当读取的数小于根节点时，替换根节点，重新塑造最大堆<br>topk大：构建一个k个数的最小堆，当读取的数大于根节点时，替换根节点，重新塑造最小堆</p><p><a href="https://leetcode-cn.com/problems/top-k-frequent-elements/" target="_blank" rel="noopener">347. 前 K 个高频元素</a></p><p><a href="https://leetcode-cn.com/problems/find-median-from-data-stream/" target="_blank" rel="noopener">295. 数据流的中位数</a></p><p><a href="https://leetcode-cn.com/problems/kth-largest-element-in-an-array/" target="_blank" rel="noopener">215. 数组中的第K个最大元素</a></p><p><a href="https://leetcode-cn.com/problems/zui-xiao-de-kge-shu-lcof/" target="_blank" rel="noopener">剑指 Offer 40. 最小的k个数</a></p><p>就是创建一个堆 然后维护堆</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>leetcode</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>堆</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>论文阅读 Paragraph-level Neural Question Generation with Maxout Pointer and Gated Self-attention Networks</title>
     <link href="/2020/03/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/"/>
     <url>/2020/03/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</url>
